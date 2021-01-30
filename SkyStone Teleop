@@ -1,0 +1,137 @@
+package org.firstinspires.ftc.teamcode.SkyStone;
+
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Gyroscope;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+@TeleOp
+
+public class TeleOp2019 extends LinearOpMode {
+
+    private DcMotor frontleft;
+    private DcMotor frontright;
+    private DcMotor backleft;
+    private DcMotor backright;
+    private Servo leftcleaver;
+    private Servo rightcleaver;
+    private Servo frontflip;
+    private Servo latch;
+    private Servo stonegrabber;
+    //private Servo lock;
+    //private Servo backflip;
+
+    @Override
+    public void runOpMode () {
+
+        frontleft = hardwareMap.get(DcMotor.class, "frontleft");
+        frontright = hardwareMap.get(DcMotor.class,"frontright");
+        backleft = hardwareMap.get(DcMotor.class,"backleft");
+        backright = hardwareMap.get(DcMotor.class, "backright");
+        leftcleaver = hardwareMap.get(Servo.class, "leftcleaver");
+        rightcleaver = hardwareMap.get(Servo.class, "rightcleaver");
+        frontflip = hardwareMap.get(Servo.class, "frontflip");
+        latch = hardwareMap.get(Servo.class, "latch");
+        stonegrabber = hardwareMap.get(Servo.class, "stonegrabber");
+        //    lock = hardwareMap.get(Servo.class, "lock");
+        //    backflip = hardwareMap.get(Servo.class, "lock");
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
+        waitForStart();
+
+//teleop code goes here
+
+        double tgtPower = 0;
+        while (opModeIsActive()) {
+
+            //flip floop mechanism code
+
+            if (gamepad2.a) {
+                leftcleaver.setPosition(0);
+                rightcleaver.setPosition(180);
+            }
+            else if (gamepad2.y) {
+                leftcleaver.setPosition(180);
+                rightcleaver.setPosition(0);
+            }
+            else if (gamepad2.right_bumper) {
+                frontflip.setPosition(0);
+
+            }
+            else if(gamepad2.left_bumper) {
+                frontflip.setPosition(180);
+
+            }
+            else if(gamepad2.b) {
+                latch.setPosition(180);
+            }
+            else if(gamepad2.x) {
+                latch.setPosition(0);
+            }
+            else if (gamepad2.dpad_down) {
+                stonegrabber.setPosition(0);
+            }
+            else if (gamepad2.dpad_up) {
+                stonegrabber.setPosition(180);
+            }
+            //else if(gamepad2.b) {
+            //    lock.setPosition(180);
+            //}
+            //else if (gamepad2.x) {
+            //    lock.setPosition(160);
+            //}
+            //else if (gamepad2.dpad_up) {
+            //    backflip.setPosition(180);
+            //}
+            //else if (gamepad2.dpad_down) {
+            //    backflip.setPosition(0);
+            //}
+
+            //basic movement code (rollllll credits!)
+
+            else if (gamepad1.right_bumper) {
+                frontleft.setPower(-.5);
+                frontright.setPower(-.5);
+                backleft.setPower(.5);
+                backright.setPower(.5);
+            }
+            else if (gamepad1.left_bumper) {
+
+                frontleft.setPower(.5);
+                frontright.setPower(.5);
+                backleft.setPower(-.5);
+                backright.setPower(-.5);
+            }
+            else {
+                frontright.setPower(gamepad1.right_stick_y);
+                //telemetry.addData("Target Power", tgtPower);
+                telemetry.addData("Motor Power", frontright.getPower());
+                telemetry.addData("Status", "Running");
+
+                telemetry.update();
+
+                backright.setPower(gamepad1.right_stick_y);
+                //telemetry.addData("Target Power", tgtPower);
+                telemetry.addData("Motor Power", backright.getPower());
+                telemetry.addData("Status", "Running");
+                telemetry.update();
+
+                frontleft.setPower(-gamepad1.left_stick_y);
+                //telemetry.addData("Target Power", tgtPower);
+                telemetry.addData("Motor Power", frontleft.getPower());
+                telemetry.addData("Status", "Running");
+                telemetry.update();
+
+                backleft.setPower(-gamepad1.left_stick_y);
+                //telemetry.addData("Target Power", tgtPower);
+                telemetry.addData("Motor Power", backleft.getPower());
+                telemetry.addData("Status", "Running");
+                telemetry.update();
+            }
+        }
+    }
+}
+
